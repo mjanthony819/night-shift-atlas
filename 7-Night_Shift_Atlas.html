@@ -1,0 +1,1898 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#eee9db"><title>Night Shift Atlas - a shifting railway puzzle</title><style>
+:root{--paper:#eee9db;--ink:#213c3b;--muted:#61736b;--red:#bc4f31;--sea:#c8d9d2;--line:#a6b3a5;--gold:#e8b65f;--tile:#f4f0e4;font-family:Georgia,'Times New Roman',serif;color:var(--ink);background:var(--paper);font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,a,input,textarea,select{-webkit-tap-highlight-color:transparent}button{font:inherit;color:inherit;cursor:pointer;border:1px solid var(--line);background:transparent;padding:.65rem 1rem;border-radius:0}button:hover{background:#213c3b0b;border-color:var(--ink)}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--red);outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed}button.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}button.primary:hover{background:#345652}button.red{background:var(--red);color:#fff;border-color:var(--red)}a{color:inherit}.grain{position:fixed;inset:0;pointer-events:none;opacity:.12;z-index:20;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.27' filter='url(%23n)'/%3E%3C/svg%3E")}header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--ink);padding:18px 4%;gap:20px;font:11px/1.5 'Courier New',monospace;letter-spacing:.09em}header .wordmark{text-decoration:none;display:flex;align-items:center;gap:12px}.mark{font:34px Georgia;color:var(--red)}.edition{border-left:1px solid var(--line);padding-left:14px;color:var(--muted)}nav{display:flex;align-items:center;gap:18px}nav button{border:0;padding:6px 0;font:inherit;white-space:nowrap}nav button span{font-size:10px;color:var(--red);margin-left:5px}main{max-width:1480px;margin:auto;padding:32px 4% 0}.eyebrow{font:10px/1.6 'Courier New',monospace;letter-spacing:.14em;color:var(--red)}.intro h1{font-size:clamp(45px,5.5vw,77px);font-weight:400;letter-spacing:-.055em;line-height:.98;margin:15px 0 10px}.intro h1 em{font-weight:400;color:var(--red)}.intro p{font-size:16px;color:var(--muted);margin:10px 0 24px}.intro-rule{display:flex;justify-content:space-between;border-top:1px solid var(--ink);border-bottom:1px solid var(--line);padding:10px 0;font:10px 'Courier New',monospace;letter-spacing:.1em}.game-layout{display:grid;grid-template-columns:minmax(150px,1fr) minmax(380px,2.9fr) minmax(170px,1.05fr);gap:30px;margin-top:25px}.dispatch{padding-top:8px}.dispatch h2{font-weight:400;font-size:28px;line-height:1.08;letter-spacing:-.025em;margin:12px 0 17px}.dispatch p,.fieldnotes p{font-size:13px;line-height:1.55;color:#516960}.ledger{margin:22px 0;border-top:1px solid var(--line);font:10px 'Courier New',monospace}.ledger>div{display:flex;justify-content:space-between;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}.ledger strong{font-weight:400;color:var(--red)}.legend{display:grid;gap:9px;font:10px 'Courier New',monospace}.legend>span{display:flex;gap:9px;align-items:center}.legend i{width:19px;text-align:center;font-style:normal}.courier-dot{display:inline-block;width:12px!important;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--ink);margin:0 3px}.mail-icon{color:#296955;font-size:20px}.depot-icon{color:var(--red);font-size:24px}.dispatch p.small{font:10px/1.6 'Courier New',monospace;color:var(--muted);margin:22px 0}.text-button{border:0;padding:8px 0;font:10px 'Courier New',monospace;text-align:left}.map-section{min-width:0}.map-top,.map-bottom{display:flex;justify-content:space-between;gap:7px;font:8px/1.4 'Courier New',monospace;letter-spacing:.06em;padding:0 0 9px}.map-top{border-bottom:1px solid var(--ink)}.map-wrap{background:var(--sea);padding:52px 15px 19px 31px;position:relative;border-bottom:1px solid var(--ink);overflow:hidden}.map-decoration{position:absolute;top:10px;left:20%;right:7%;font-size:13px;color:#6b8c83;font-style:italic;text-align:center}.map-decoration svg{display:block;width:100%;height:20px;fill:none;stroke:#89a99d;stroke-width:1}.compass{position:absolute;top:12px;left:17px;font:10px/1.1 'Courier New',monospace;text-align:center}.map-bottom{padding-top:10px;letter-spacing:0}.map-bottom b{font-weight:400;border:1px solid var(--line);padding:1px 3px}.district{display:grid;grid-template-columns:26px 1fr 26px;align-items:stretch;gap:5px;margin-bottom:5px}.row-label{position:absolute;left:6px;align-self:center;transform:rotate(-90deg);font:8px 'Courier New',monospace;letter-spacing:.08em}.shift{padding:0;background:#d9e1d4;border-color:#8fa598;font:19px Georgia;min-width:24px}.shift[aria-pressed=true]{background:var(--ink);color:var(--paper)}.track-row{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:3px;border:1px solid transparent;transition:border-color .16s}.district.selected .track-row{border-color:var(--red)}.tile{padding:0;position:relative;aspect-ratio:1;background:var(--tile);border:1px solid #a3b2a0;min-width:0;display:block;overflow:hidden;isolation:isolate}.tile:hover{background:#f9f6ed}.tile svg{display:block;width:100%;height:100%}.tile .rail-shadow{stroke:#d0c8aa;stroke-width:19;fill:none;stroke-linecap:butt}.tile .rail{stroke:#385c51;stroke-width:9;fill:none;stroke-linecap:butt}.tile .rail-dash{stroke:#eee9db;stroke-width:1.2;fill:none;stroke-dasharray:3 4}.tile .building{fill:#b7c3ad;stroke:#9dac95;stroke-width:.7}.tile .tile-no{position:absolute;bottom:2px;right:4px;font:7px 'Courier New',monospace;color:#82927e;z-index:0}.token{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2}.courier{height:28px;width:28px;border-radius:50%;background:var(--gold);border:2px solid var(--ink);box-shadow:0 2px 0 #213c3b44;display:grid;place-items:center;font-size:15px;color:var(--ink)}.mail{font:24px Georgia;color:#fff;background:#356e5a;width:28px;height:25px;line-height:21px;border:1px solid #214e3e;transform:translate(-50%,-50%) rotate(-5deg)}.mail.collected{background:var(--paper);color:#356e5a;opacity:.5;font-size:17px;line-height:24px}.depot{font-size:34px;line-height:1;color:var(--red);text-shadow:1px 1px var(--paper),-1px -1px var(--paper)}.courier+.token{top:25%;left:25%;font-size:15px}.quay{font:7px 'Courier New',monospace;letter-spacing:.25em;margin:17px 30px 0;text-align:center;color:#56766b}.quay span{margin:0 8px}.fieldnotes{padding-top:0}.sun{border-bottom:1px solid var(--line);height:95px;position:relative;overflow:hidden;margin-bottom:15px}.sun:before{content:'';position:absolute;background:var(--red);border-radius:50%;width:100px;height:100px;left:20%;top:4px;opacity:.9}.sun:after{content:'';position:absolute;inset:60px 0 0;background:repeating-linear-gradient(0deg,var(--paper) 0px,var(--paper) 4px,transparent 4px,transparent 7px);transform:rotate(-4deg)}.sun span{position:absolute;z-index:1;top:15px;left:44%;color:var(--paper);font-size:42px}.fieldnotes h3{font-size:25px;font-weight:400;line-height:1.1;letter-spacing:-.025em;margin:10px 0}.fieldnotes p{font-size:12px}.district-control{font:8px/1.5 'Courier New',monospace;border-top:1px solid var(--line);padding-top:12px;margin-top:18px}.district-control>span{color:var(--muted);letter-spacing:.12em}.district-control strong{display:block;font-size:10px;font-weight:400;margin:4px 0 10px}.district-control>div{display:flex;gap:6px}.district-control button{font:10px 'Courier New',monospace;padding:8px 9px;flex:1;white-space:nowrap}.dpad{display:grid;grid-template-columns:repeat(3,34px);grid-template-rows:repeat(3,30px);justify-content:center;align-items:center;margin-top:14px;gap:3px}.dpad button{padding:3px}.dpad button:first-child{grid-column:2}.dpad button:nth-child(2){grid-row:2}.dpad span{grid-row:2;grid-column:2;text-align:center;color:var(--red)}.dpad button:nth-child(4){grid-row:2;grid-column:3}.dpad button:last-child{grid-row:3;grid-column:2}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:15px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);margin-top:23px;padding:13px 0;font:11px 'Courier New',monospace}.toolbar>div{display:flex;gap:10px}.toolbar button{padding:7px 10px;white-space:nowrap}.toolbar p{flex:1;font:11px/1.5 'Courier New',monospace;color:var(--muted);margin:0;text-align:center}.toolbar kbd{font:8px 'Courier New',monospace;border-left:1px solid var(--line);padding-left:7px;margin-left:6px}footer{padding:15px 0;display:flex;justify-content:space-between;align-items:center;gap:15px;font:8px 'Courier New',monospace;letter-spacing:.04em;color:var(--muted)}footer button{border:0;font:inherit;padding:5px}dialog{background:var(--paper);color:var(--ink);border:1px solid var(--ink);padding:35px;max-width:750px;width:calc(100% - 30px);max-height:90vh;overflow:auto;box-shadow:8px 8px 0 #213c3b38}dialog::backdrop{background:#213c3bb3;backdrop-filter:blur(3px)}.close-modal{position:absolute;right:8px;top:8px;border:0;font-size:24px;padding:0 9px}.modal-title{font-weight:400;letter-spacing:-.035em;font-size:36px;margin:10px 0 15px}.modal-copy{font-size:15px;line-height:1.6;color:#4c645c}.modal-copy h3{font-weight:400;color:var(--ink);font-size:23px}.modal-copy ol{padding-left:24px}.modal-copy li{margin:10px 0}.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.campaign-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}.level-choice{text-align:left;padding:13px 10px;min-height:92px;display:flex;flex-direction:column;gap:8px}.level-choice strong{font:10px 'Courier New',monospace;color:var(--red)}.level-choice span{font-size:17px}.level-choice small{font:9px 'Courier New',monospace;color:var(--muted)}.level-choice.current{border:2px solid var(--ink)}.chapter-heading{font:10px 'Courier New',monospace;letter-spacing:.1em;margin:22px 0 0;color:var(--red)}.setting-row{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);padding:14px 0;gap:15px}.setting-row input{accent-color:var(--ink)}textarea,input[type=text],select{font:12px 'Courier New',monospace;padding:10px;border:1px solid var(--line);background:var(--tile);color:var(--ink);max-width:100%}textarea{width:100%;height:120px;resize:vertical}.editor-grid{display:grid;grid-template-columns:repeat(4,1fr);max-width:340px;margin:20px auto;gap:5px}.editor-grid button{aspect-ratio:1;padding:0;font:25px 'Courier New',monospace;background:var(--tile);position:relative}.editor-grid button small{font:8px 'Courier New',monospace;position:absolute;bottom:3px;left:3px;right:3px;color:var(--red)}.editor-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.editor-tools button{font:10px 'Courier New',monospace;padding:8px}.editor-tools button.active{background:var(--ink);color:var(--paper)}.win-seal{border:2px solid var(--red);border-radius:50%;width:90px;height:90px;display:grid;place-content:center;text-align:center;float:right;color:var(--red);font:10px/1.4 'Courier New',monospace;transform:rotate(12deg)}.win-stats{display:flex;gap:30px;margin:25px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:18px 0}.win-stats strong{font-size:31px;font-weight:400;display:block}.win-stats span{font:9px 'Courier New',monospace}.reduced-motion *{transition:none!important;animation:none!important}.high-contrast{--paper:#fffdf4;--ink:#0b2725;--muted:#334a3d;--red:#a52e10;--line:#607563;--sea:#d4e4db;--tile:#fffdf4}.toast-error{color:var(--red)!important}
+@media(min-width:1500px){main{padding-top:38px}.map-wrap{padding-top:60px}}@media(max-width:1100px){.game-layout{grid-template-columns:145px minmax(340px,1fr) 155px;gap:20px}.edition{display:none}.fieldnotes p{font-size:11px}.dispatch h2{font-size:25px}.map-wrap{padding-left:25px;padding-right:9px}.toolbar{font-size:10px}.toolbar kbd{display:none}.map-bottom{font-size:7px}.district-control button{padding:8px 4px}.dispatch p{font-size:12px}.sun{height:75px}}
+@media(max-width:820px){header{padding:12px 4%;gap:10px;flex-wrap:wrap}nav{gap:18px;justify-content:space-between;width:100%}header .wordmark{font-size:10px}.intro-rule{font-size:8px}.game-layout{grid-template-columns:1fr;gap:15px}.dispatch{display:grid;grid-template-columns:1fr auto;gap:0 25px}.dispatch>.eyebrow{grid-column:1}.dispatch h2{font-size:27px;margin:7px 0}.dispatch>p{grid-column:1;margin:4px 0 10px}.dispatch .ledger{grid-column:2;grid-row:1/4;margin:0;min-width:135px}.dispatch .ledger>div{padding:9px 0}.dispatch .legend,.dispatch .small,.dispatch .text-button{display:none}.map-section{max-width:570px;width:100%;justify-self:center}.map-wrap{padding:44px 12px 15px 27px}.fieldnotes{display:grid;grid-template-columns:1fr 140px;gap:0 15px;border-top:1px solid var(--line);padding-top:12px}.fieldnotes>.sun,.fieldnotes>.eyebrow,.fieldnotes h3,.fieldnotes>p{display:none}.district-control{margin:0;padding:0;border:0}.district-control strong{margin-bottom:7px}.district-control button{font-size:12px;padding:10px}.dpad{margin:0;grid-column:2;grid-row:1;grid-template-columns:repeat(3,37px);grid-template-rows:repeat(3,28px)}.toolbar{margin-top:15px;flex-wrap:wrap;gap:9px}.toolbar p{order:3;flex-basis:100%;text-align:left;border-top:1px solid var(--line);padding-top:9px;min-height:38px}.toolbar button{font-size:10px}.map-bottom{font-size:8px}.intro p{margin-bottom:18px}main{padding-top:25px}footer{font-size:7px;flex-wrap:wrap}.campaign-grid{grid-template-columns:repeat(2,1fr)}dialog{padding:28px 20px}.modal-title{font-size:31px}.modal-copy{font-size:13px}.tile .courier{width:28px;height:28px}.quay{font-size:7px}.map-top{font-size:7px}}@media(max-width:390px){.map-wrap{padding-left:22px;padding-right:5px}.district{grid-template-columns:22px 1fr 22px;gap:3px}.track-row{gap:3px;padding:2px}.row-label{left:3px}.tile .courier{width:24px;height:24px;font-size:12px}.tile .mail{width:24px;height:23px;font-size:20px}.intro h1{font-size:45px}.intro-rule{font-size:7px}.dispatch .ledger{min-width:120px}.dispatch h2{font-size:24px}nav{gap:12px;font-size:10px}}
+@media(max-width:820px){nav button{min-height:44px;font-size:11px}.district-control button,.toolbar button{min-height:44px}.dpad{grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px)}.dpad button{min-height:44px;font-size:18px}.fieldnotes{grid-template-columns:1fr 140px;align-items:center}.map-top,.map-bottom{font-size:8px}.intro-rule{font-size:8px}.legend,.ledger{font-size:10px}.row-label{font-size:9px}.modal-actions button,.editor-tools button{min-height:44px}footer{font-size:8px}.toolbar p{font-size:11px}.map-bottom{flex-wrap:wrap}}
+.mobile-focus{display:none}@media(max-width:820px){.map-top{align-items:center;flex-wrap:wrap}.mobile-focus{display:block;font:10px 'Courier New',monospace;min-height:36px;padding:7px 9px}.focus-map>header,.focus-map .intro,.focus-map .dispatch,.focus-map footer{display:none}.focus-map main{padding:8px 3%}.focus-map .game-layout{margin-top:0;gap:8px}.focus-map .map-top{font-size:8px;padding-bottom:5px}.focus-map .map-wrap{padding-top:28px;padding-bottom:8px}.focus-map .map-decoration{top:3px;font-size:11px}.focus-map .map-decoration svg{height:9px}.focus-map .compass{top:4px}.focus-map .quay{margin-top:8px;font-size:6px}.focus-map .map-bottom{padding-top:6px}.focus-map .fieldnotes{padding-top:7px}.focus-map .toolbar{margin-top:8px;padding:7px 0}.focus-map .toolbar p{font-size:10px;min-height:31px;padding-top:6px}.focus-map .dpad{grid-template-rows:repeat(3,40px)}.focus-map .dpad button{min-height:40px}}
+
+</style></head>
+<body><div class="grain" aria-hidden="true"></div>
+<header><a class="wordmark" href="#" id="home"><span class="mark" aria-hidden="true">✳</span> LITTLE HARBOR POST <span class="edition">GAME OFF / 2026</span></a><nav aria-label="Main"><button id="campaign">The atlas <span id="completeCount">0/18</span></button><button id="workshop">Workshop</button><button id="help">How to play</button><button id="settings" aria-label="Open settings">☼</button></nav></header>
+<main>
+<section class="intro"><div class="eyebrow">A POSTAL PUZZLE IN EIGHTEEN DISPATCHES</div><h1>Night Shift <em>Atlas.</em></h1><p>The streets move. The letters must arrive.</p><div class="intro-rule"><span>SHIFT THE CITY. FIND A WAY HOME.</span><span id="chapterLabel">I / THE HARBOR</span></div></section>
+<div class="game-layout">
+<aside class="dispatch"><div class="eyebrow" id="dispatchNo">DISPATCH 01</div><h2 id="levelName"></h2><p id="levelNote"></p><div class="ledger"><div><span>Mail collected</span><strong id="mailCount">0 / 1</strong></div><div><span>Actions</span><strong id="moves">0</strong></div><div><span>Shortest route</span><strong id="par">5</strong></div></div><div class="legend"><span><i class="courier-dot"></i> You, the night courier</span><span><i class="mail-icon">✉</i> Mail to collect</span><span><i class="depot-icon">⌂</i> Return depot</span></div><p class="small">No timer. No lost lives.<br>Every wrong turn can be undone.</p><button class="text-button" id="prev">← Previous dispatch</button></aside>
+<section class="map-section" aria-label="Interactive railway map"><div class="map-top"><span>LITTLE HARBOR / TRANSIT AUTHORITY</span><span id="mapStatus">NIGHT SERVICE</span><button id="focusMap" class="mobile-focus">Focus map ↗</button></div><div class="map-wrap"><div class="compass" aria-hidden="true">N<br>↑</div><div class="map-decoration" aria-hidden="true"><span>the quiet sea</span><svg viewBox="0 0 700 50"><path d="M0 25 Q40 5 80 25T160 25T240 25T320 25T400 25T480 25T560 25T640 25T720 25"/></svg></div><div id="board" role="group" aria-label="Railway board, four districts"></div><div class="quay" aria-hidden="true">HARBOR QUAY <span>●</span> EST. 2026</div></div><div class="map-bottom"><span><b>1-4</b> select district</span><span><b>Q / E</b> shift it</span><span><b>↑ ↓ ← →</b> walk</span></div></section>
+<aside class="fieldnotes"><div class="sun" aria-hidden="true"><span>☾</span></div><div class="eyebrow">FIELD NOTES</div><h3>Move the map.<br>Not the mountain.</h3><p>Walk only where the tracks connect. Shift an entire district to open a new route.</p><p>Your courier, letters and depot ride along with their tiles. The edges wrap when shifting, not when walking.</p><div class="district-control"><span>SELECTED DISTRICT</span><strong id="selectedName">01 / NORTH DOCK</strong><div><button id="shiftLeft" aria-label="Shift selected district left">← Shift</button><button id="shiftRight" aria-label="Shift selected district right">Shift →</button></div></div><div class="dpad" aria-label="Walk controls"><button data-move="0" aria-label="Walk north">↑</button><button data-move="3" aria-label="Walk west">←</button><span aria-hidden="true">✦</span><button data-move="1" aria-label="Walk east">→</button><button data-move="2" aria-label="Walk south">↓</button></div></aside>
+</div><div class="toolbar"><div><button id="undo">↶ Undo <kbd>Z</kbd></button><button id="reset">↻ Reset <kbd>R</kbd></button></div><p id="notice" role="status" aria-live="polite">Select district 2. Shift it left to join the first route.</p><button id="hint">A gentle hint <span>↗</span></button></div>
+<footer><span>AN ORIGINAL GAME FOR GAME OFF 2026 / THEME: SHIFT</span><button id="credits">Credits & accessibility</button><span id="saveStatus">PROGRESS SAVED ON THIS DEVICE</span></footer>
+</main>
+<dialog id="modal"><div id="modalContent"></div><button id="closeModal" class="close-modal" aria-label="Close dialog">×</button></dialog>
+<script type="module">
+// ---- Pure game engine ----
+// Pure rules shared by the game, solver, generator and tests. No browser dependencies.
+const DIRS=[[-1,0,1,4,'N'],[0,1,2,8,'E'],[1,0,4,1,'S'],[0,-1,8,2,'W']];
+const mod=(a,n)=>((a%n)+n)%n;
+function validate(l){
+ if(!l||l.n!==4||!Array.isArray(l.tiles)||l.tiles.length!==16||l.tiles.some(x=>!Number.isInteger(x)||x<0||x>15))throw Error('A map needs exactly sixteen track masks (0 to 15).');
+ for(const k of ['start','exit'])if(!Number.isInteger(l[k])||l[k]<0||l[k]>15||!l.tiles[l[k]])throw Error('Start and depot must be on track.');
+ if(l.start===l.exit)throw Error('Start and depot must be different.');
+ if(!Array.isArray(l.stamps)||l.stamps.length<1||l.stamps.length>3||new Set(l.stamps).size!==l.stamps.length||l.stamps.some(i=>!Number.isInteger(i)||i<0||i>15||!l.tiles[i]||i===l.start||i===l.exit))throw Error('Use one to three distinct mail stops, away from start and depot.');
+ if(l.locked&&(!Array.isArray(l.locked)||l.locked.some(r=>!Number.isInteger(r)||r<0||r>3)))throw Error('Locked rows must be 0 to 3.');
+ if(l.offsets&&(!Array.isArray(l.offsets)||l.offsets.length!==4||l.offsets.some(x=>!Number.isInteger(x)||x<0||x>3)))throw Error('Offsets must be four numbers from 0 to 3.');
+ return l;
+}
+function tileAt(l,s,p){const r=p>>2,c=p%4;return r*4+mod(c-s.o[r],4)}
+function initial(l){validate(l);const o=[...(l.offsets||[0,0,0,0])];const p=(l.start>>2)*4+mod(l.start%4+o[l.start>>2],4);return {o,p,m:0}}
+const copy=s=>({o:[...s.o],p:s.p,m:s.m});
+function collect(l,s){const i=l.stamps.indexOf(tileAt(l,s,s.p));if(i>=0)s.m|=1<<i;return s}
+function won(l,s){return s.m===(1<<l.stamps.length)-1&&tileAt(l,s,s.p)===l.exit}
+function step(l,s,a){
+ const t=copy(s);
+ if(a[0]==='s'){
+  const r=a[1],d=a[2];if(!Number.isInteger(r)||r<0||r>3||![1,-1].includes(d)||(l.locked||[]).includes(r))return null;
+  t.o[r]=mod(t.o[r]+d,4);if((t.p>>2)===r)t.p=r*4+mod(t.p%4+d,4);
+ }else if(a[0]==='m'){
+  const d=DIRS[a[1]];if(!d)return null;const r=(s.p>>2)+d[0],c=s.p%4+d[1];if(r<0||r>3||c<0||c>3)return null;
+  const p=r*4+c;if(!(l.tiles[tileAt(l,s,s.p)]&d[2])||!(l.tiles[tileAt(l,s,p)]&d[3]))return null;t.p=p;
+ }else return null;
+ return collect(l,t);
+}
+function key(l,s){return ((((s.o[0]*4+s.o[1])*4+s.o[2])*4+s.o[3])*16+s.p)*(1<<l.stamps.length)+s.m}
+const actions=l=>[...DIRS.map((_,i)=>['m',i]),...[0,1,2,3].filter(r=>!(l.locked||[]).includes(r)).flatMap(r=>[['s',r,-1],['s',r,1]])];
+function solve(l,start=initial(l),limit=100000){
+ const size=4096*(1<<l.stamps.length),prev=new Int32Array(size).fill(-1),used=new Int16Array(size),q=[start],as=actions(l),root=key(l,start);prev[root]=root;let end=null,head=0;
+ while(head<q.length&&head<limit){const s=q[head++],k=key(l,s);if(won(l,s)){end=k;break}
+  for(let i=0;i<as.length;i++){const t=step(l,s,as[i]);if(!t)continue;const tk=key(l,t);if(prev[tk]!==-1)continue;prev[tk]=k;used[tk]=i;q.push(t)}
+ }
+ if(end===null)return {path:null,visited:head,limited:head>=limit};
+ const path=[];while(end!==root){path.push(as[used[end]]);end=prev[end]}return {path:path.reverse(),visited:head,limited:false};
+}
+function describe(a){return a[0]==='m'?`Walk ${['north','east','south','west'][a[1]]}`:`Shift district ${a[1]+1} ${a[2]<0?'left':'right'}`}
+
+// ---- Verified campaign data ----
+// Campaign generated from a fixed seed; every shortest route verified by BFS.
+const LEVELS=[
+  {
+    "id": 1,
+    "name": "The first dispatch",
+    "note": "One letter. One depot. Follow the connected ink lines, then shift a whole district when the route runs out.",
+    "n": 4,
+    "tiles": [
+      6,
+      10,
+      12,
+      0,
+      5,
+      0,
+      5,
+      0,
+      3,
+      10,
+      9,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "start": 0,
+    "exit": 10,
+    "stamps": [
+      8
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      1,
+      0,
+      0
+    ],
+    "par": 5,
+    "solution": [
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        1
+      ]
+    ]
+  },
+  {
+    "id": 2,
+    "name": "The shifting street",
+    "note": "The brass arrows move every tile in a district. If you are on it, you ride with it.",
+    "n": 4,
+    "tiles": [
+      5,
+      3,
+      9,
+      14,
+      12,
+      12,
+      14,
+      12,
+      11,
+      12,
+      14,
+      14,
+      6,
+      14,
+      11,
+      10
+    ],
+    "start": 7,
+    "exit": 14,
+    "stamps": [
+      6
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 6,
+    "solution": [
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Borrowed tracks",
+    "note": "A shift changes the north-south connections. Find the seam where two tracks can meet.",
+    "n": 4,
+    "tiles": [
+      0,
+      11,
+      7,
+      6,
+      14,
+      11,
+      0,
+      0,
+      14,
+      5,
+      9,
+      0,
+      13,
+      12,
+      14,
+      11
+    ],
+    "start": 9,
+    "exit": 15,
+    "stamps": [
+      3
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 11,
+    "solution": [
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Across the water",
+    "note": "The canals have no bridges until you move the streets into place.",
+    "n": 4,
+    "tiles": [
+      11,
+      5,
+      10,
+      12,
+      7,
+      13,
+      12,
+      12,
+      12,
+      5,
+      6,
+      0,
+      6,
+      6,
+      5,
+      12
+    ],
+    "start": 8,
+    "exit": 5,
+    "stamps": [
+      3
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 10,
+    "solution": [
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "s",
+        3,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Return to sender",
+    "note": "The depot travels with its district too. A familiar place can be somewhere new.",
+    "n": 4,
+    "tiles": [
+      11,
+      12,
+      14,
+      10,
+      10,
+      3,
+      13,
+      6,
+      5,
+      3,
+      7,
+      6,
+      13,
+      9,
+      7,
+      6
+    ],
+    "start": 7,
+    "exit": 3,
+    "stamps": [
+      11
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 12,
+    "solution": [
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        3,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ]
+    ]
+  },
+  {
+    "id": 6,
+    "name": "The harbor wakes",
+    "note": "The last boat sounds its horn. The first district is ready for its dawn delivery.",
+    "n": 4,
+    "tiles": [
+      5,
+      14,
+      14,
+      5,
+      9,
+      9,
+      6,
+      10,
+      13,
+      9,
+      10,
+      3,
+      3,
+      0,
+      9,
+      3
+    ],
+    "start": 11,
+    "exit": 2,
+    "stamps": [
+      12
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 10,
+    "solution": [
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        0
+      ]
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Two addresses",
+    "note": "Two addresses, any order. Keep both letters safe before you return.",
+    "n": 4,
+    "tiles": [
+      14,
+      10,
+      7,
+      7,
+      7,
+      14,
+      12,
+      14,
+      12,
+      6,
+      5,
+      10,
+      7,
+      5,
+      3,
+      14
+    ],
+    "start": 13,
+    "exit": 12,
+    "stamps": [
+      0,
+      2
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 12,
+    "solution": [
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Countercurrent",
+    "note": "Sometimes the best way forward is to ride a district in the other direction.",
+    "n": 4,
+    "tiles": [
+      12,
+      14,
+      3,
+      0,
+      10,
+      9,
+      9,
+      5,
+      11,
+      0,
+      9,
+      5,
+      0,
+      3,
+      3,
+      12
+    ],
+    "start": 10,
+    "exit": 1,
+    "stamps": [
+      15,
+      6
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 14,
+    "solution": [
+      [
+        "s",
+        0,
+        1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        0
+      ]
+    ]
+  },
+  {
+    "id": 9,
+    "name": "A locked district",
+    "note": "One district is fixed for repair. Its neighbors can still come to meet it.",
+    "n": 4,
+    "tiles": [
+      13,
+      11,
+      0,
+      12,
+      6,
+      12,
+      7,
+      11,
+      7,
+      3,
+      7,
+      0,
+      7,
+      7,
+      10,
+      3
+    ],
+    "start": 12,
+    "exit": 14,
+    "stamps": [
+      3,
+      4
+    ],
+    "locked": [
+      3
+    ],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 13,
+    "solution": [
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ]
+    ]
+  },
+  {
+    "id": 10,
+    "name": "The long way home",
+    "note": "There is no clock. Study the seams. The harbor can wait.",
+    "n": 4,
+    "tiles": [
+      9,
+      9,
+      6,
+      6,
+      11,
+      10,
+      7,
+      9,
+      10,
+      5,
+      12,
+      12,
+      14,
+      0,
+      5,
+      3
+    ],
+    "start": 7,
+    "exit": 10,
+    "stamps": [
+      4,
+      6
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 12,
+    "solution": [
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ]
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Passing places",
+    "note": "A dead end is only a dead end in the current arrangement.",
+    "n": 4,
+    "tiles": [
+      11,
+      6,
+      6,
+      11,
+      10,
+      13,
+      12,
+      6,
+      6,
+      11,
+      6,
+      6,
+      14,
+      9,
+      12,
+      13
+    ],
+    "start": 0,
+    "exit": 13,
+    "stamps": [
+      7,
+      10
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 15,
+    "solution": [
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 12,
+    "name": "The tide table",
+    "note": "The city keeps its own tide table: four shifts bring a district home.",
+    "n": 4,
+    "tiles": [
+      6,
+      14,
+      14,
+      3,
+      9,
+      11,
+      5,
+      14,
+      12,
+      0,
+      5,
+      5,
+      9,
+      0,
+      0,
+      14
+    ],
+    "start": 5,
+    "exit": 0,
+    "stamps": [
+      2,
+      8
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 15,
+    "solution": [
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        3,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ]
+    ]
+  },
+  {
+    "id": 13,
+    "name": "Three last letters",
+    "note": "Three letters remain. Every envelope is a stop, not a destination.",
+    "n": 4,
+    "tiles": [
+      10,
+      10,
+      6,
+      7,
+      13,
+      0,
+      12,
+      3,
+      11,
+      12,
+      7,
+      5,
+      0,
+      10,
+      11,
+      12
+    ],
+    "start": 6,
+    "exit": 10,
+    "stamps": [
+      7,
+      15,
+      1
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 18,
+    "solution": [
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 14,
+    "name": "The still quarter",
+    "note": "The sleeping quarter will not move tonight. Bring the route to it.",
+    "n": 4,
+    "tiles": [
+      12,
+      6,
+      5,
+      5,
+      3,
+      12,
+      11,
+      3,
+      11,
+      12,
+      9,
+      7,
+      9,
+      3,
+      3,
+      14
+    ],
+    "start": 4,
+    "exit": 7,
+    "stamps": [
+      12,
+      1,
+      9
+    ],
+    "locked": [
+      2
+    ],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 15,
+    "solution": [
+      [
+        "m",
+        1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "s",
+        3,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        2
+      ]
+    ]
+  },
+  {
+    "id": 15,
+    "name": "All roads change",
+    "note": "Carry the route with you. The atlas is a machine, not a picture.",
+    "n": 4,
+    "tiles": [
+      14,
+      9,
+      5,
+      0,
+      6,
+      6,
+      9,
+      9,
+      13,
+      12,
+      11,
+      5,
+      14,
+      10,
+      3,
+      11
+    ],
+    "start": 1,
+    "exit": 13,
+    "stamps": [
+      2,
+      4,
+      8
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 17,
+    "solution": [
+      [
+        "m",
+        3
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        0,
+        1
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        3,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        1
+      ]
+    ]
+  },
+  {
+    "id": 16,
+    "name": "The midnight exchange",
+    "note": "Shift the city around the courier, or carry the courier through the city.",
+    "n": 4,
+    "tiles": [
+      6,
+      5,
+      14,
+      12,
+      7,
+      9,
+      10,
+      6,
+      0,
+      6,
+      11,
+      6,
+      9,
+      10,
+      10,
+      11
+    ],
+    "start": 12,
+    "exit": 13,
+    "stamps": [
+      9,
+      2,
+      7
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 17,
+    "solution": [
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Before the sunrise",
+    "note": "The sky is lightening. One more careful dispatch.",
+    "n": 4,
+    "tiles": [
+      9,
+      0,
+      13,
+      6,
+      13,
+      10,
+      9,
+      10,
+      10,
+      0,
+      13,
+      5,
+      14,
+      9,
+      12,
+      11
+    ],
+    "start": 4,
+    "exit": 5,
+    "stamps": [
+      12,
+      10,
+      15
+    ],
+    "locked": [
+      3
+    ],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 19,
+    "solution": [
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        1,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        -1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        1,
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "m",
+        3
+      ]
+    ]
+  },
+  {
+    "id": 18,
+    "name": "An atlas of arrivals",
+    "note": "Every letter has a home. Bring the atlas to its final arrangement.",
+    "n": 4,
+    "tiles": [
+      7,
+      7,
+      5,
+      5,
+      11,
+      14,
+      0,
+      6,
+      10,
+      14,
+      12,
+      3,
+      14,
+      0,
+      12,
+      3
+    ],
+    "start": 7,
+    "exit": 2,
+    "stamps": [
+      0,
+      15,
+      10
+    ],
+    "locked": [],
+    "offsets": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "par": 17,
+    "solution": [
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        1
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        2,
+        1
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        3
+      ],
+      [
+        "m",
+        0
+      ],
+      [
+        "m",
+        2
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "s",
+        0,
+        -1
+      ],
+      [
+        "m",
+        0
+      ]
+    ]
+  }
+];
+
+// ---- Presentation and local state ----
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STORE='night-shift-atlas-v1',districts=['North Dock','Canal Street','Market Quarter','Harbor Quay'];
+let storageOK=true;
+function read(){try{return JSON.parse(localStorage.getItem(STORE)||'null')}catch{return null}}
+let saved=read(),prefs={sound:false,motion:matchMedia('(prefers-reduced-motion: reduce)').matches,contrast:false,...(saved?.prefs||{})};
+let records=validRecords(saved?.records)?saved.records:{},index=Number.isInteger(saved?.index)&&saved.index>=0&&saved.index<18?saved.index:0;
+let level=LEVELS[index],state=initial(level),history=[],moves=0,hints=0,selected=1,custom=false,requestId=0,worker=null,editor=null,editorTool='track',audio=null;
+function validRecords(r){return r&&typeof r==='object'&&!Array.isArray(r)&&Object.keys(r).every(k=>/^([1-9]|1[0-8])$/.test(k)&&Number.isInteger(r[k]?.best)&&r[k].best>=0&&r[k].best<=10000&&typeof r[k].hinted==='boolean')}
+function stateOK(s){return s&&Array.isArray(s.o)&&s.o.length===4&&s.o.every(n=>Number.isInteger(n)&&n>=0&&n<4)&&Number.isInteger(s.p)&&s.p>=0&&s.p<16&&Number.isInteger(s.m)&&s.m>=0&&s.m<(1<<level.stamps.length)}
+if(saved?.run&&saved.run.index===index&&stateOK(saved.run.state)&&Number.isInteger(saved.run.moves)&&saved.run.moves>=0&&saved.run.moves<=10000){state=saved.run.state;moves=saved.run.moves;hints=Number.isInteger(saved.run.hints)&&saved.run.hints>=0?saved.run.hints:0}
+function save(){try{localStorage.setItem(STORE,JSON.stringify({v:1,prefs,records,index,seen:true,run:custom?null:{index,state,moves,hints}}));storageOK=true}catch{storageOK=false}$('#saveStatus').textContent=storageOK?'PROGRESS SAVED ON THIS DEVICE':'STORAGE UNAVAILABLE / EXPORT A BACKUP'}
+function applyPrefs(){document.body.classList.toggle('reduced-motion',!!prefs.motion);document.body.classList.toggle('high-contrast',!!prefs.contrast)}
+function sound(kind='move'){
+ if(!prefs.sound)return;try{audio??=new (window.AudioContext||window.webkitAudioContext)();audio.resume();const now=audio.currentTime;const tones=kind==='win'?[392,494,587,784]:kind==='shift'?[147,196]:kind==='mail'?[523,659]:[294];tones.forEach((hz,i)=>{const osc=audio.createOscillator(),gain=audio.createGain();osc.type='sine';osc.frequency.value=hz;gain.gain.setValueAtTime(0,now+i*.09);gain.gain.linearRampToValueAtTime(.065,now+i*.09+.015);gain.gain.exponentialRampToValueAtTime(.001,now+i*.09+.24);osc.connect(gain).connect(audio.destination);osc.start(now+i*.09);osc.stop(now+i*.09+.25)})}catch{prefs.sound=false}}
+function notice(text,error=false){$('#notice').textContent=text;$('#notice').classList.toggle('toast-error',error)}
+function rail(mask,id){let path='';for(const [dr,dc,b]of DIRS)if(mask&b)path+=`M50 50L${50+dc*50} ${50+dr*50}`;
+ const blocks=mask===0?'<path class="building" d="M20 32L40 22 58 33 58 65 20 65Z M65 50L78 43 88 50 88 75 65 75Z"/><path d="M28 38v14m10-14v14m10-14v14" stroke="#e9e7d7" stroke-width="3"/>':'';
+ return `<svg viewBox="0 0 100 100" aria-hidden="true">${blocks}<path class="rail-shadow" d="${path}"/><path class="rail" d="${path}"/><path class="rail-dash" d="${path}"/></svg><span class="tile-no">${String(id+1).padStart(2,'0')}</span>`}
+function render(){
+ $('#dispatchNo').textContent=custom?'WORKSHOP / PLAYTEST':`DISPATCH ${String(index+1).padStart(2,'0')} / 18`;
+ $('#levelName').textContent=level.name;$('#levelNote').textContent=level.note||'An original route from the workshop.';
+ $('#mailCount').textContent=`${state.m.toString(2).replace(/0/g,'').length} / ${level.stamps.length}`;
+ $('#moves').textContent=moves;$('#par').textContent=level.par??'Unrated';
+ $('#completeCount').textContent=`${Object.keys(records).length}/18`;
+ $('#chapterLabel').textContent=custom?'THE WORKSHOP':['I / THE HARBOR','II / THE CURRENT','III / THE DAWN'][Math.floor(index/6)];
+ $('#selectedName').textContent=`0${selected+1} / ${districts[selected].toUpperCase()}${(level.locked||[]).includes(selected)?' / FIXED':''}`;
+ $('#undo').disabled=!history.length;$('#prev').disabled=custom||index===0;
+ $('#shiftLeft').disabled=$('#shiftRight').disabled=won(level,state)||(level.locked||[]).includes(selected);
+ $('#mapStatus').textContent=won(level,state)?'ALL MAIL DELIVERED':custom?'WORKSHOP ROUTE':`DISPATCH ${String(index+1).padStart(2,'0')}`;
+ $('#board').innerHTML=[0,1,2,3].map(r=>{const locked=(level.locked||[]).includes(r);return `<div class="district ${r===selected?'selected':''}" data-row="${r}"><span class="row-label" aria-hidden="true">D${r+1}</span><button class="shift" data-shift="${r},-1" aria-label="${locked?'Fixed district':'Shift district'} ${r+1} left" aria-pressed="${r===selected}" ${locked||won(level,state)?'disabled':''}>${locked?'·':'‹'}</button><div class="track-row">${[0,1,2,3].map(c=>{const p=r*4+c,id=tileAt(level,state,p),mask=level.tiles[id],stamp=level.stamps.indexOf(id),here=state.p===p;let label=`District ${r+1}, column ${c+1}. ${mask?'Tracks '+DIRS.filter(d=>mask&d[2]).map(d=>d[4]).join(', '):'Buildings'}.`;if(here)label+=' Courier here.';if(stamp>=0)label+=state.m&(1<<stamp)?' Mail collected.':' Mail stop.';if(id===level.exit)label+=' Return depot.';return `<button class="tile" data-pos="${p}" aria-label="${label}" ${won(level,state)?'disabled':''}>${rail(mask,id)}${here?'<span class="token courier" aria-hidden="true">✦</span>':''}${stamp>=0?`<span class="token mail ${state.m&(1<<stamp)?'collected':''}" aria-hidden="true">${state.m&(1<<stamp)?'✓':'✉'}</span>`:''}${id===level.exit?'<span class="token depot" aria-hidden="true">⌂</span>':''}</button>`}).join('')}</div><button class="shift" data-shift="${r},1" aria-label="${locked?'Fixed district':'Shift district'} ${r+1} right" aria-pressed="${r===selected}" ${locked||won(level,state)?'disabled':''}>${locked?'·':'›'}</button></div>`}).join('');
+ save();
+}
+function start(i){custom=false;index=i;level=LEVELS[i];state=initial(level);history=[];moves=0;hints=0;selected=(level.locked||[]).includes(1)?0:1;requestId++;$('#hint').disabled=false;render();notice(i===0?'Select district 2. Shift it left to join the first route.':'Collect every letter, then reach the red depot.');close()}
+function act(a){if(won(level,state))return;requestId++;$('#hint').disabled=false;const next=step(level,state,a);if(!next){notice(a[0]==='s'?'That district is fixed. Select another one.':'No connected track that way. Try shifting a district.',true);return}
+ history.push({state:copy(state),moves});const old=state.m;state=next;moves++;if(a[0]==='s')selected=a[1];sound(state.m!==old?'mail':a[0]==='s'?'shift':'move');render();notice(state.m!==old?'Letter collected. Now find the next stop, or head to the depot.':describe(a)+'.');
+ if(won(level,state)){if(!custom){const oldR=records[level.id];if(!oldR||moves<oldR.best)records[level.id]={best:moves,hinted:hints>0};else if(moves===oldR.best&&!hints)oldR.hinted=false;save()}sound('win');showWin()}
+}
+function undo(){if(!history.length)return;const p=history.pop();state=p.state;moves=p.moves;requestId++;$('#hint').disabled=false;render();notice('One action undone. A different route is always possible.')}
+function reset(){state=initial(level);history=[];moves=0;hints=0;requestId++;$('#hint').disabled=false;render();notice('Dispatch reset. All letters are back at their stops.')}
+function select(r){selected=r;render();notice(`District ${r+1} selected${(level.locked||[]).includes(r)?'. This district is fixed.':'. Use Q / E, Shift, or its brass arrows.'}`)}
+function modal(html){$('#modalContent').innerHTML=html;$('#modal').showModal();$('#modal').scrollTop=0}
+function close(){$('#modal').close()}
+function showWin(){const perfect=moves===level.par&&!hints;modal(`<div class="win-seal" aria-hidden="true">LITTLE HARBOR<br>✓<br>DELIVERED</div><div class="eyebrow">${custom?'WORKSHOP ROUTE COMPLETE':index===17?'THE LAST DISPATCH':'LETTER BY LETTER'}</div><h2 class="modal-title">${index===17&&!custom?'The harbor is home.':'Safe arrivals.'}</h2><p class="modal-copy">${custom?'Your route works. Return to the workshop to refine it, or share its map code.':index===17?'The last letter arrives as the sun lifts over the quay. The city is different. Every address is found. Thank you for taking the night shift.':'Another small corner of the city has found its way. Take a breath. There are more letters on the quay.'}</p><div class="win-stats"><div><strong>${moves}</strong><span>ACTIONS TAKEN</span></div><div><strong>${level.par??'—'}</strong><span>SHORTEST ROUTE</span></div><div><strong>${hints}</strong><span>HINTS USED</span></div></div><p class="modal-copy">${perfect?'✦ A perfect dispatch: shortest route, without hints.':hints?'Route completed with help. Replays are always welcome.':'Mail delivered. Try again if you want a shorter route.'}</p><div class="modal-actions"><button class="primary" id="nextLevel">${custom?'Back to workshop':index===17?'Open the atlas':'Next dispatch →'}</button><button id="replay">Replay this route</button></div>`);$('#nextLevel').onclick=()=>custom?openWorkshop():index===17?showCampaign():start(index+1);$('#replay').onclick=()=>{close();reset()}}
+function showCampaign(){modal(`<div class="eyebrow">EIGHTEEN DISPATCHES / THREE CHAPTERS</div><h2 class="modal-title">An atlas of arrivals.</h2><p class="modal-copy">Every route is open. Play in order to learn the city, or choose a dispatch. A star means a shortest route without hints. Progress stays in this browser.</p>${[0,1,2].map(ch=>`<h3 class="chapter-heading">${['I / THE HARBOR - learn to shift','II / THE CURRENT - two letters, fixed districts','III / THE DAWN - the last three letters'][ch]}</h3><div class="campaign-grid">${LEVELS.slice(ch*6,ch*6+6).map(l=>`<button data-level="${l.id-1}" class="level-choice ${!custom&&l.id===index+1?'current':''}"><strong>${String(l.id).padStart(2,'0')} ${records[l.id]?(records[l.id].best===l.par&&!records[l.id].hinted?'✦':'✓'):''}</strong><span>${esc(l.name)}</span><small>${records[l.id]?`BEST ${records[l.id].best} / PAR ${l.par}${records[l.id].hinted?' / HINTED':''}`:`PAR ${l.par} / ${l.stamps.length} LETTER${l.stamps.length>1?'S':''}`}</small></button>`).join('')}</div>`).join('')}`);$$('[data-level]').forEach(b=>b.onclick=()=>start(Number(b.dataset.level)))}
+function showHelp(first=false){modal(`<div class="eyebrow">WELCOME TO THE NIGHT SERVICE</div><h2 class="modal-title">The city is yours to shift.</h2><div class="modal-copy"><p>Each night, Little Harbor rearranges its streets. You are the courier who still has to deliver the mail.</p><ol><li><strong>Collect every green envelope.</strong> Walk along the dark tracks. Both tiles must connect at the seam.</li><li><strong>Shift a whole district.</strong> Click its left or right arrow. Tiles wrap around, carrying you and every letter with them. Walking never wraps.</li><li><strong>Return to the red depot.</strong> Find the house after collecting all the letters. There is no timer, and undo is available for every action in this session.</li></ol><h3>The first dispatch</h3><p>Select <strong>district 2</strong> and shift it <strong>left once</strong>. Walk south twice, then east twice. After that, the atlas is yours.</p><p><strong>Keyboard:</strong> arrows or WASD to walk; 1-4 to select a district; Q / E or Shift to slide it; Z to undo; R to reset. On touch, use the arrows beside each row and the compass pad below the map. Tap an adjacent connected tile to walk there.</p><p>Later routes introduce two or three letters and fixed districts. A gentle hint suggests one shortest next action, it never plays for you. Audio is optional and off by default.</p></div><div class="modal-actions"><button class="primary" id="begin">${first?'Begin the night shift':'Back to the map'}</button><button id="helpSettings">Accessibility settings</button></div>`);$('#begin').onclick=()=>{close();save()};$('#helpSettings').onclick=showSettings}
+function showSettings(){modal(`<div class="eyebrow">MAKE YOURSELF AT HOME</div><h2 class="modal-title">A quieter kind of shift.</h2><div class="modal-copy"><label class="setting-row">Procedural sound effects <input id="soundToggle" type="checkbox" ${prefs.sound?'checked':''}></label><label class="setting-row">Reduce motion <input id="motionToggle" type="checkbox" ${prefs.motion?'checked':''}></label><label class="setting-row">Higher contrast <input id="contrastToggle" type="checkbox" ${prefs.contrast?'checked':''}></label><p>No flashing, timer, lives, ads, account, analytics or external API. Keyboard and touch both work. Visual symbols distinguish letters, depot and courier as well as color. The board is labeled for assistive technology, but it is still a spatial puzzle and has not been tested with screen-reader users.</p><h3>Keep your atlas</h3><p>Progress is stored only in this browser. Private browsing, clearing storage or switching devices can lose it. Export a backup to keep your dispatch records and current route.</p></div><div class="modal-actions"><button id="exportSave">Export progress</button><label><span class="eyebrow">IMPORT BACKUP</span><input type="file" id="importSave" accept=".json,application/json" style="display:block;margin-top:8px;max-width:240px"></label></div><p id="settingsStatus" role="status" class="modal-copy"></p>`);
+ for(const [id,key]of [['soundToggle','sound'],['motionToggle','motion'],['contrastToggle','contrast']])$('#'+id).onchange=e=>{prefs[key]=e.target.checked;applyPrefs();save();if(key==='sound')sound('mail')};
+ $('#exportSave').onclick=()=>download('night-shift-atlas-progress.json',{v:1,prefs,records,index,run:custom?null:{index,state,moves,hints}});
+ $('#importSave').onchange=async e=>{try{const f=e.target.files[0];if(!f)return;if(f.size>50000)throw Error('Backup is too large.');const d=JSON.parse(await f.text());if(d.v!==1||!validRecords(d.records)||!Number.isInteger(d.index)||d.index<0||d.index>17)throw Error('This is not a valid Atlas backup.');records=d.records;const target=d.index;start(target);if(d.run?.index===target&&stateOK(d.run.state)&&Number.isInteger(d.run.moves)&&d.run.moves>=0&&d.run.moves<10001){state=d.run.state;moves=d.run.moves;hints=Math.max(0,Number(d.run.hints)||0);history=[];render()}notice('Progress imported. Settings were kept from this device.')}catch(err){$('#settingsStatus').textContent='Could not import: '+err.message}};
+}
+function download(name,data){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function showCredits(){modal(`<div class="eyebrow">COLOPHON / GAME OFF 2026</div><h2 class="modal-title">Made for a moving city.</h2><div class="modal-copy"><p><strong>Night Shift Atlas</strong> is an original browser puzzle game entered by M J Anthony. Theme: <strong>SHIFT</strong>, interpreted as moving the city around its courier.</p><p><strong>AI disclosure:</strong> AI assistance was used extensively for concept development, programming, level generation, tests, visual design, documentation and demo narration. This is not a claim that M personally coded or tested the game. The playable game has no runtime AI.</p><p><strong>Art and audio:</strong> original code-drawn vector tracks, buildings and paper-map design. Sound effects are synthesized locally with Web Audio. No third-party art, music, fonts, libraries, tracking or network requests are needed to play.</p><p><strong>Technology:</strong> native JavaScript modules, SVG, HTML and CSS. The solver uses breadth-first search in a worker. All eighteen campaign maps have solver-verified shortest routes. The engine and tests are available with the source under the MIT license.</p><p>Built during November 2026 for Game Off. Not affiliated with or endorsed by GitHub. Local progress belongs to this browser. No server-side accounts or cloud saves.</p><p><strong>Accessibility:</strong> see Settings for contrast and reduced motion. Keyboard shortcuts do not run while a dialog or input is open. Escape closes dialogs. The spatial layout may still be difficult for nonvisual play; no specialist accessibility audit has been performed.</p></div><div class="modal-actions"><button id="creditSettings">Settings & backup</button><button id="creditHelp">How to play</button></div>`);$('#creditSettings').onclick=showSettings;$('#creditHelp').onclick=()=>showHelp()}
+function hint(){if(won(level,state)){showWin();return}const id=++requestId;$('#hint').disabled=true;notice('Consulting the atlas...');
+ const receive=result=>{if(id!==requestId)return;$('#hint').disabled=false;if(!result.path){notice(result.limited?'The search limit was reached. Undo or reset to a known route.':'No route from here. Undo a shift or reset this dispatch.',true);return}hints++;save();notice(result.path.length?`Hint: ${describe(result.path[0])}. ${result.path.length} action${result.path.length===1?'':'s'} remain on a shortest route.`:'All letters delivered.');};
+ try{worker??=new Worker(URL.createObjectURL(new Blob(["// Pure rules shared by the game, solver, generator and tests. No browser dependencies.\nconst DIRS=[[-1,0,1,4,'N'],[0,1,2,8,'E'],[1,0,4,1,'S'],[0,-1,8,2,'W']];\nconst mod=(a,n)=>((a%n)+n)%n;\nfunction validate(l){\n if(!l||l.n!==4||!Array.isArray(l.tiles)||l.tiles.length!==16||l.tiles.some(x=>!Number.isInteger(x)||x<0||x>15))throw Error('A map needs exactly sixteen track masks (0 to 15).');\n for(const k of ['start','exit'])if(!Number.isInteger(l[k])||l[k]<0||l[k]>15||!l.tiles[l[k]])throw Error('Start and depot must be on track.');\n if(l.start===l.exit)throw Error('Start and depot must be different.');\n if(!Array.isArray(l.stamps)||l.stamps.length<1||l.stamps.length>3||new Set(l.stamps).size!==l.stamps.length||l.stamps.some(i=>!Number.isInteger(i)||i<0||i>15||!l.tiles[i]||i===l.start||i===l.exit))throw Error('Use one to three distinct mail stops, away from start and depot.');\n if(l.locked&&(!Array.isArray(l.locked)||l.locked.some(r=>!Number.isInteger(r)||r<0||r>3)))throw Error('Locked rows must be 0 to 3.');\n if(l.offsets&&(!Array.isArray(l.offsets)||l.offsets.length!==4||l.offsets.some(x=>!Number.isInteger(x)||x<0||x>3)))throw Error('Offsets must be four numbers from 0 to 3.');\n return l;\n}\nfunction tileAt(l,s,p){const r=p>>2,c=p%4;return r*4+mod(c-s.o[r],4)}\nfunction initial(l){validate(l);const o=[...(l.offsets||[0,0,0,0])];const p=(l.start>>2)*4+mod(l.start%4+o[l.start>>2],4);return {o,p,m:0}}\nconst copy=s=>({o:[...s.o],p:s.p,m:s.m});\nfunction collect(l,s){const i=l.stamps.indexOf(tileAt(l,s,s.p));if(i>=0)s.m|=1<<i;return s}\nfunction won(l,s){return s.m===(1<<l.stamps.length)-1&&tileAt(l,s,s.p)===l.exit}\nfunction step(l,s,a){\n const t=copy(s);\n if(a[0]==='s'){\n  const r=a[1],d=a[2];if(!Number.isInteger(r)||r<0||r>3||![1,-1].includes(d)||(l.locked||[]).includes(r))return null;\n  t.o[r]=mod(t.o[r]+d,4);if((t.p>>2)===r)t.p=r*4+mod(t.p%4+d,4);\n }else if(a[0]==='m'){\n  const d=DIRS[a[1]];if(!d)return null;const r=(s.p>>2)+d[0],c=s.p%4+d[1];if(r<0||r>3||c<0||c>3)return null;\n  const p=r*4+c;if(!(l.tiles[tileAt(l,s,s.p)]&d[2])||!(l.tiles[tileAt(l,s,p)]&d[3]))return null;t.p=p;\n }else return null;\n return collect(l,t);\n}\nfunction key(l,s){return ((((s.o[0]*4+s.o[1])*4+s.o[2])*4+s.o[3])*16+s.p)*(1<<l.stamps.length)+s.m}\nconst actions=l=>[...DIRS.map((_,i)=>['m',i]),...[0,1,2,3].filter(r=>!(l.locked||[]).includes(r)).flatMap(r=>[['s',r,-1],['s',r,1]])];\nfunction solve(l,start=initial(l),limit=100000){\n const size=4096*(1<<l.stamps.length),prev=new Int32Array(size).fill(-1),used=new Int16Array(size),q=[start],as=actions(l),root=key(l,start);prev[root]=root;let end=null,head=0;\n while(head<q.length&&head<limit){const s=q[head++],k=key(l,s);if(won(l,s)){end=k;break}\n  for(let i=0;i<as.length;i++){const t=step(l,s,as[i]);if(!t)continue;const tk=key(l,t);if(prev[tk]!==-1)continue;prev[tk]=k;used[tk]=i;q.push(t)}\n }\n if(end===null)return {path:null,visited:head,limited:head>=limit};\n const path=[];while(end!==root){path.push(as[used[end]]);end=prev[end]}return {path:path.reverse(),visited:head,limited:false};\n}\nfunction describe(a){return a[0]==='m'?`Walk ${['north','east','south','west'][a[1]]}`:`Shift district ${a[1]+1} ${a[2]<0?'left':'right'}`}\n\nself.onmessage=e=>{const {id,level,state}=e.data;self.postMessage({id,result:solve(level,state)})};"],{type:'text/javascript'})));worker.onmessage=e=>{if(e.data.id===id)receive(e.data.result)};worker.onerror=()=>{worker?.terminate();worker=null;if(id===requestId)receive(solve(level,state))};worker.postMessage({id,level,state})}catch{receive(solve(level,state))}}
+const masks=[0,5,10,3,6,12,9,7,14,13,11,15],glyph={0:'·',5:'│',10:'─',3:'└',6:'┌',12:'┐',9:'┘',7:'├',14:'┬',13:'┤',11:'┴',15:'┼'};
+function newEditor(){const l=LEVELS[3];return {n:4,name:'My harbor route',note:'A route from the Little Harbor workshop.',tiles:[...l.tiles],start:l.start,exit:l.exit,stamps:[...l.stamps],locked:[]}}
+function openWorkshop(){editor??=newEditor();modal(`<div class="eyebrow">THE MAPMAKER'S WORKSHOP</div><h2 class="modal-title">A city of your own.</h2><p class="modal-copy">Choose a tool, then tap a tile. The track tool cycles through twelve track shapes. Set one courier, one depot and one to three letters. A fixed-district tool toggles a row. Playtest checks that a solution exists.</p><label class="eyebrow">ROUTE NAME <input id="editorName" type="text" maxlength="50" value="${esc(editor.name)}" style="display:block;width:100%;margin-top:5px"></label><div class="editor-tools">${[['track','Tracks'],['start','Courier'],['exit','Depot'],['mail','Letters'],['lock','Fix district']].map(([k,v])=>`<button data-tool="${k}" class="${editorTool===k?'active':''}">${v}</button>`).join('')}</div><div id="editorBoard" class="editor-grid"></div><p id="editorStatus" class="modal-copy" role="status"></p><div class="modal-actions"><button id="playtest" class="primary">Check & play route</button><button id="exportMap">Export map code</button><button id="freshMap">New from sample</button></div><details style="margin-top:20px"><summary class="eyebrow">IMPORT / SHARE MAP CODE</summary><textarea id="mapCode" aria-label="Map code JSON" spellcheck="false" style="margin-top:10px" placeholder="Paste an Atlas map code here"></textarea><button id="importMap">Import map</button></details>`);
+ const board=()=>{$('#editorBoard').innerHTML=editor.tiles.map((v,p)=>`<button data-edit="${p}" aria-label="Edit tile ${p+1}, ${glyph[v]}">${glyph[v]}<small>${p===editor.start?'COURIER ':''}${p===editor.exit?'DEPOT ':''}${editor.stamps.includes(p)?'MAIL ':''}${editor.locked.includes(p>>2)?'FIXED':''}</small></button>`).join('');$$('[data-edit]').forEach(b=>b.onclick=()=>{const p=Number(b.dataset.edit);if(editorTool==='track')editor.tiles[p]=masks[(masks.indexOf(editor.tiles[p])+1)%masks.length];if(editorTool==='start')editor.start=p;if(editorTool==='exit')editor.exit=p;if(editorTool==='mail'){if(editor.stamps.includes(p))editor.stamps=editor.stamps.filter(x=>x!==p);else if(editor.stamps.length<3)editor.stamps.push(p);else{$('#editorStatus').textContent='Three letters is the maximum. Remove one first.';return}}if(editorTool==='lock'){const r=p>>2;editor.locked=editor.locked.includes(r)?editor.locked.filter(x=>x!==r):[...editor.locked,r]}board();$('#editorStatus').textContent='Map edited. Check the route before playing or sharing.'})};board();
+ $$('[data-tool]').forEach(b=>b.onclick=()=>{editorTool=b.dataset.tool;$$('[data-tool]').forEach(x=>x.classList.toggle('active',x===b))});
+ function checked(){editor.name=$('#editorName').value.trim().slice(0,50)||'Untitled harbor';validate(editor);const result=solve(editor);if(!result.path)throw Error('No delivery route exists. Change the tracks, stops or fixed districts.');return {...editor,par:result.path.length}}
+ $('#playtest').onclick=()=>{try{const checkedLevel=checked();custom=true;level=checkedLevel;state=initial(level);history=[];moves=0;hints=0;selected=0;requestId++;$('#hint').disabled=false;render();close();notice('Workshop playtest. Every letter has a verified route home.')}catch(e){$('#editorStatus').textContent=e.message}};
+ $('#exportMap').onclick=()=>{try{const l=checked();const code=JSON.stringify({v:1,map:l});$('#mapCode').value=code;$('#mapCode').closest('details').open=true;$('#mapCode').select();download('atlas-map.json',{v:1,map:l});$('#editorStatus').textContent=`Solvable in ${l.par} actions. Map code ready to copy or download.`}catch(e){$('#editorStatus').textContent=e.message}};
+ $('#importMap').onclick=()=>{try{const text=$('#mapCode').value;if(text.length>5000)throw Error('Map code is too large.');const d=JSON.parse(text);if(d.v!==1||!d.map)throw Error('Expected an Atlas map code, version 1.');const l=d.map;const clean={n:l.n,tiles:l.tiles,start:l.start,exit:l.exit,stamps:l.stamps,locked:l.locked||[],name:typeof l.name==='string'?l.name.slice(0,50):'Imported harbor',note:'A shared route from the workshop.'};validate(clean);if(!solve(clean).path)throw Error('This map has no delivery route.');editor=clean;openWorkshop();$('#editorStatus').textContent='Map imported and solvability checked.'}catch(e){$('#editorStatus').textContent='Could not import: '+e.message}};
+ $('#freshMap').onclick=()=>{editor=newEditor();openWorkshop()};
+}
+$('#board').onclick=e=>{const shift=e.target.closest('[data-shift]');if(shift){const [r,d]=shift.dataset.shift.split(',').map(Number);act(['s',r,d]);return}const tile=e.target.closest('[data-pos]');if(!tile)return;const p=Number(tile.dataset.pos),dr=(p>>2)-(state.p>>2),dc=p%4-state.p%4;const dir=DIRS.findIndex(d=>d[0]===dr&&d[1]===dc);if(dir>=0)act(['m',dir]);else select(p>>2)};
+$('#shiftLeft').onclick=()=>act(['s',selected,-1]);$('#shiftRight').onclick=()=>act(['s',selected,1]);$$('[data-move]').forEach(b=>b.onclick=()=>act(['m',Number(b.dataset.move)]));
+$('#focusMap').onclick=()=>{const focused=document.body.classList.toggle('focus-map');$('#focusMap').textContent=focused?'Full page ↙':'Focus map ↗';window.scrollTo(0,0)};
+$('#undo').onclick=undo;$('#reset').onclick=reset;$('#hint').onclick=hint;$('#campaign').onclick=showCampaign;$('#home').onclick=e=>{e.preventDefault();showCampaign()};$('#help').onclick=()=>showHelp();$('#settings').onclick=showSettings;$('#credits').onclick=showCredits;$('#workshop').onclick=openWorkshop;$('#prev').onclick=()=>index>0&&start(index-1);$('#closeModal').onclick=close;
+$('#modal').addEventListener('click',e=>{if(e.target===$('#modal')){const r=$('#modal').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close()}});
+document.addEventListener('keydown',e=>{if($('#modal').open||e.ctrlKey||e.metaKey||e.altKey||/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;const k=e.key.toLowerCase();if(['arrowup','arrowright','arrowdown','arrowleft','w','d','s','a','q','e','shift','z','r','1','2','3','4'].includes(k))e.preventDefault();if(/^[1-4]$/.test(k))select(Number(k)-1);else if(k==='q')act(['s',selected,-1]);else if(k==='e'||k==='shift')act(['s',selected,1]);else if(k==='z')undo();else if(k==='r')reset();else{const dir={arrowup:0,w:0,arrowright:1,d:1,arrowdown:2,s:2,arrowleft:3,a:3}[k];if(dir!==undefined)act(['m',dir])}});
+window.addEventListener('pagehide',save);
+// Read-only diagnostic snapshot for reproducible UI checks; not a gameplay control.
+window.atlasSnapshot=()=>structuredClone({index,level,state,moves,hints,records,custom,selected});
+applyPrefs();render();if(!saved?.seen)showHelp(true);else if(won(level,state))showWin();
+
+</script></body></html>
