@@ -1,0 +1,10 @@
+import {chromium} from 'playwright';import {serve} from './serve.mjs';import {LEVELS} from '../src/levels.mjs';
+const s=serve(8741),b=await chromium.launch({args:['--no-sandbox']}),ctx=await b.newContext({viewport:{width:1440,height:1000},recordVideo:{dir:'/downloads/night-shift-atlas/media/raw',size:{width:1440,height:1000}}}),p=await ctx.newPage();const start=Date.now();const at=async(t,fn)=>{const wait=t*1000-(Date.now()-start);if(wait>0)await p.waitForTimeout(wait);if(fn)await fn()};
+await p.goto('http://127.0.0.1:8741/release/index.html');await p.locator('#begin').click();await p.evaluate(()=>document.body.style.zoom='.84');
+await at(7,()=>p.locator('#help').click());await at(17,()=>p.locator('#closeModal').click());
+await at(20,()=>p.locator('[data-shift="0,1"]').click());await at(22,()=>p.locator('#undo').click());await at(24,()=>p.locator('[data-shift="1,-1"]').click());await at(26,()=>p.locator('#undo').click());
+await at(30,()=>p.locator('[data-shift="1,-1"]').click());await at(32,()=>p.keyboard.press('ArrowDown'));await at(34,()=>p.keyboard.press('ArrowDown'));await at(36,()=>p.keyboard.press('ArrowRight'));await at(38,()=>p.keyboard.press('ArrowRight'));
+await at(40,()=>p.locator('#nextLevel').click());await at(42,()=>p.locator('#campaign').click());await at(46,()=>p.locator('[data-level="8"]').click());await at(48,()=>p.locator('#hint').click());await at(51,()=>p.locator('[data-shift="0,1"]').click());await at(52,()=>p.locator('#undo').click());
+await at(55,()=>p.locator('#settings').click());await at(59,()=>p.locator('#exportSave').click());await at(61,()=>p.locator('#contrastToggle').check());await at(63,()=>p.locator('#motionToggle').check());await at(64,()=>p.locator('#soundToggle').check());await at(65,()=>p.locator('#closeModal').click());
+await at(67,()=>p.locator('#workshop').click());await at(69,()=>p.locator('#editorName').fill('The dawn delivery'));await at(70,()=>p.locator('#exportMap').click());await at(73,()=>p.locator('#playtest').click());await at(75,()=>p.locator('#credits').click());await at(85);
+const vid=p.video();await ctx.close();console.log(await vid.path());await b.close();s.close();
