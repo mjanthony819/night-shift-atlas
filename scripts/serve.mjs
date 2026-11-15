@@ -1,0 +1,4 @@
+import {createServer} from 'node:http';import {readFile} from 'node:fs/promises';import {fileURLToPath} from 'node:url';import {resolve,extname} from 'node:path';
+const root=fileURLToPath(new URL('../',import.meta.url)),types={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.json':'application/json','.png':'image/png'};
+export function serve(port=8080){return createServer(async(req,res)=>{try{const path=resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]==='/'?'/index.html':req.url.split('?')[0]));if(!path.startsWith(root))throw Error('outside root');const data=await readFile(path);res.writeHead(200,{'Content-Type':types[extname(path)]||'application/octet-stream'});res.end(data)}catch{res.writeHead(404);res.end('Not found')}}).listen(port,'127.0.0.1')}
+if(process.argv[1]===fileURLToPath(import.meta.url))serve(Number(process.env.PORT)||8080).on('listening',()=>console.log('Night Shift Atlas at http://127.0.0.1:8080'));
