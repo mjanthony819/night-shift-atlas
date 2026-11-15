@@ -1,0 +1,17 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+import {LEVELS} from '../src/levels.mjs';
+import {initial,step,won,tileAt,solve,key,validate,copy} from '../src/engine.mjs';
+for(const l of LEVELS)test(`dispatch ${l.id}: shortest route and every action verified`,()=>{validate(l);const answer=solve(l);assert.equal(answer.path.length,l.par);assert.deepEqual(answer.path,l.solution);let s=initial(l);for(const a of answer.path){assert.equal(won(l,s),false);const before=JSON.stringify(s);const t=step(l,s,a);assert.ok(t);assert.equal(JSON.stringify(s),before,'step does not mutate input');s=t}assert.ok(won(l,s));assert.equal(s.m,(1<<l.stamps.length)-1)});
+test('first route is genuinely instructional',()=>{assert.deepEqual(LEVELS[0].solution,[['s',1,-1],['m',2],['m',2],['m',1],['m',1]])});
+test('four shifts restore every tile and courier',()=>{const l=LEVELS[1];for(let r=0;r<4;r++){let s=initial(l);for(let i=0;i<4;i++)s=step(l,s,['s',r,1]);assert.deepEqual(s,initial(l))}});
+test('opposite shifts invert and courier rides its row',()=>{const l=LEVELS[1],s=initial(l),r=s.p>>2;const t=step(l,s,['s',r,1]);assert.equal(tileAt(l,t,t.p),l.start);assert.equal(t.p%4,(s.p%4+1)%4);assert.deepEqual(step(l,t,['s',r,-1]),s)});
+test('courier stays put when another row shifts',()=>{const l=LEVELS[0],s=initial(l);assert.equal(step(l,s,['s',2,1]).p,s.p)});
+test('walking never wraps at board edges',()=>{const l={n:4,tiles:Array(16).fill(15),start:0,exit:15,stamps:[5]},s=initial(l);assert.equal(step(l,s,['m',0]),null);assert.equal(step(l,s,['m',3]),null)});
+test('both track ends must connect',()=>{const l={n:4,tiles:Array(16).fill(5),start:0,exit:15,stamps:[4]},s=initial(l);assert.equal(step(l,s,['m',1]),null);assert.ok(step(l,s,['m',2]))});
+test('letters collected once, depot requires all letters',()=>{const l={n:4,tiles:Array(16).fill(15),start:0,exit:2,stamps:[1]};let s=initial(l);s=step(l,s,['m',1]);assert.equal(s.m,1);s=step(l,s,['m',3]);s=step(l,s,['m',1]);assert.equal(s.m,1);s=step(l,s,['m',1]);assert.ok(won(l,s));assert.equal(won(l,{...s,m:0}),false)});
+test('fixed districts cannot shift',()=>{const l=LEVELS.find(l=>l.locked.length),s=initial(l);assert.equal(step(l,s,['s',l.locked[0],1]),null)});
+test('unsolvable layouts and search limits are honest',()=>{const l={n:4,tiles:[5,0,0,0,0,0,0,0,0,0,0,0,0,0,5,5],start:0,exit:15,stamps:[14],locked:[0,1,2,3]};assert.equal(solve(l).path,null);assert.equal(solve(LEVELS[17],undefined,1).limited,true)});
+test('key distinguishes all legal states',()=>{const l=LEVELS[17],seen=new Set;for(let o=0;o<256;o++)for(let p=0;p<16;p++)for(let m=0;m<8;m++){const s={o:[o>>6,(o>>4)&3,(o>>2)&3,o&3],p,m};const k=key(l,s);assert.ok(!seen.has(k));seen.add(k)}assert.equal(seen.size,32768)});
+test('invalid imported maps are rejected',()=>{for(const d of [null,{}, {...LEVELS[0],tiles:[]},{...LEVELS[0],start:16},{...LEVELS[0],stamps:[8,8]},{...LEVELS[0],locked:[9]},{...LEVELS[0],tiles:Array(16).fill(-1)},{...LEVELS[0],offsets:[4,0,0,0]}])assert.throws(()=>validate(d))});
+test('copy and initial do not alias campaign data',()=>{const l=LEVELS[0],s=initial(l),t=copy(s);t.o[0]=3;assert.equal(s.o[0],0);assert.equal(l.offsets[0],0)});
