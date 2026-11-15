@@ -1,0 +1,7 @@
+node_modules/
+media/raw/
+media/progress-test.json
+media/demo-*.png
+docs/check-*.png
+docs/*contact-sheet.png
+docs/final-page*.png
